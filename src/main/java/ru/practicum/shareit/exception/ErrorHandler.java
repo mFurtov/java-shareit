@@ -22,7 +22,7 @@ public class ErrorHandler {
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse EmailConflictException(final EmailUniqueException e) {
+    public ErrorResponse emailConflictException(final EmailUniqueException e) {
         return new ErrorResponse(e.getMessage());
     }
 }
