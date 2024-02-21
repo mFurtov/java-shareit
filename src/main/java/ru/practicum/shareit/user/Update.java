@@ -1,5 +1,4 @@
 package ru.practicum.shareit.user;
 
-public class InMemoryUserManager {
-
+public interface Update {
 }

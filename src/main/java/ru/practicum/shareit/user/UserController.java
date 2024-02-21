@@ -2,15 +2,12 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserDto;
 
-import javax.validation.Valid;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/users")
@@ -19,29 +16,29 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> userGetAll() {
-        List<User> userList = userService.userGetAll();
+    public List<UserDto> userGetAll() {
+        List<UserDto> userList = userService.userGetAll();
         log.info("Выведен список пользователей. он равен \"{}\"", userList.size());
         return userList;
     }
 
     @GetMapping("/{id}")
-    public User userGetId(@PathVariable int id) {
-        User user = userService.userGetId(id);
+    public UserDto userGetId(@PathVariable int id) {
+        UserDto user = userService.userGetId(id);
         log.info("Выведен пользователь с id \"{}\"", id);
         return user;
     }
 
     @PostMapping
-    public User postUser(@Valid @RequestBody User user) {
-        User userPost = userService.postUser(user);
+    public UserDto postUser(@Validated(Create.class) @RequestBody UserDto user) {
+        UserDto userPost = userService.postUser(user);
         log.info("Пользователь с id \"{}\" добавлен", userPost.getId());
         return userPost;
     }
 
     @PatchMapping("/{id}")
-    public User patchUser(@PathVariable int id, @RequestBody User userRequest) {
-        User userPost = userService.patchUser(id, userRequest.getName(), userRequest.getEmail());
+    public UserDto patchUser(@PathVariable int id, @RequestBody UserDto userRequest) {
+        UserDto userPost = userService.patchUser(id, userRequest.getName(), userRequest.getEmail());
         log.info("Пользователь с id \"{}\" обновлен", userPost.getId());
         return userPost;
     }

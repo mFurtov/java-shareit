@@ -5,32 +5,33 @@ import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserRepositoryImpl implements UserRepository {
-    private List<User> userList = new ArrayList<>();
+    private Map<Integer, User> userMap = new HashMap<>();
     private int id = 1;
 
     @Override
     public List<User> userGetAll() {
-        return userList;
+        return new ArrayList<>(userMap.values());
     }
 
     @Override
     public User userGetId(int id) {
-        for (User user : userList) {
-            if (user.getId() == id) {
-                return user;
-            }
+        if (userMap.containsKey(id)) {
+            return userMap.get(id);
+        } else {
+            throw new EntityNotFoundException("Пользователь с id" + id + " не найден");
         }
-        throw new EntityNotFoundException("Пользователь с id" + id + " не найден");
     }
 
     @Override
     public User postUser(User user) {
         user.setId(incrementId());
-        userList.add(user);
+        userMap.put(user.getId(),user);
         return user;
     }
 
@@ -38,10 +39,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User patchUser(int id, String name, String email) {
         User user = userGetId(id);
-        if (name != null) {
+        if (name != null && !name.isBlank()) {
             user.setName(name);
         }
-        if (email != null) {
+        if (email != null && !email.isBlank()) {
             user.setEmail(email);
         }
         return user;
@@ -49,8 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void dellUser(int id) {
-        User user = userGetId(id);
-        userList.remove(user);
+        userMap.remove(id);
     }
 
     private int incrementId() {

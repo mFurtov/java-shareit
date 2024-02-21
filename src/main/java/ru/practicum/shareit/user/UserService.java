@@ -5,8 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.EmailUniqueException;
 import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,23 +18,28 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    public List<User> userGetAll() {
-        return userRepository.userGetAll();
+    public List<UserDto> userGetAll() {
+        List<UserDto> userDto = new ArrayList<>();
+        List<User> users = userRepository.userGetAll();
+        for (User u : users) {
+            userDto.add(UserMapper.toUserDto(u));
+        }
+        return userDto;
     }
 
-    public User userGetId(int id) {
-        return userRepository.userGetId(id);
+    public UserDto userGetId(int id) {
+        return UserMapper.toUserDto(userRepository.userGetId(id));
     }
 
-    public User postUser(User user) {
+    public UserDto postUser(UserDto user) {
         checkEmail(user.getId(), user.getEmail());
-        return userRepository.postUser(user);
+        return UserMapper.toUserDto(userRepository.postUser(UserMapper.fromUserDto(user)));
 
     }
 
-    public User patchUser(int id, String name, String email) {
+    public UserDto patchUser(int id, String name, String email) {
         checkEmail(id, email);
-        return userRepository.patchUser(id, name, email);
+        return UserMapper.toUserDto(userRepository.patchUser(id, name, email));
     }
 
     public void dellUser(int id) {
