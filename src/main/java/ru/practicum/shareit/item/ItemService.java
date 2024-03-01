@@ -46,8 +46,8 @@ public class ItemService {
         return ItemMapper.toItemDto(itemRepository.postItem(ItemMapper.fromItemDto(itemDto, user)));
     }
 
-    public ItemDto patchItem(int userId, int id, String name, String description, Boolean available) {
+    public ItemDto patchItem(int userId, int id, ItemDto itemDto) {
         User user = UserMapper.fromUserDto(userService.userGetId(userId));
-        return ItemMapper.toItemDto(itemRepository.patchItem(userId, id, name, description, available));
+        return ItemMapper.toItemDto(itemRepository.patchItem(userId, id,itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable()));
     }
 }

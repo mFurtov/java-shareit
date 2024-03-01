@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.Create;
+import ru.practicum.shareit.HeaderConstants;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
@@ -45,12 +47,9 @@ public class ItemController {
 
     @PatchMapping("/{id}")
     public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemDto itemRequest) {
-        ItemDto item = itemService.patchItem(userId, id, itemRequest.getName(), itemRequest.getDescription(), itemRequest.getAvailable());
+        ItemDto item = itemService.patchItem(userId, id, itemRequest);
         log.info("Предмет с id \"{}\" обновлен", item.getId());
         return item;
     }
 
-    public class HeaderConstants {
-        public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
-    }
 }

@@ -55,8 +55,6 @@ public class ItemRepositoryImpl implements ItemRepository {
         Item itemPatch = itemList.get(id);
 
         if (userId == itemPatch.getOwner().getId()) {
-            List<Item> oldOwnerItems = userItemIndex.get(userId);
-            oldOwnerItems.remove(itemPatch);
             if (name != null && !name.isBlank()) {
                 itemPatch.setName(name);
             }
@@ -66,8 +64,6 @@ public class ItemRepositoryImpl implements ItemRepository {
             if (available != null) {
                 itemPatch.setAvailable(available);
             }
-            final List<Item> newOwnerItems = userItemIndex.computeIfAbsent(itemPatch.getOwner().getId(), k -> new ArrayList<>());
-            newOwnerItems.add(itemPatch);
         } else {
             log.error("Указанный владелец не владелец вещи");
             throw new OwnerException("Доступ к предмету отсутствует, указан неверный владелец");
