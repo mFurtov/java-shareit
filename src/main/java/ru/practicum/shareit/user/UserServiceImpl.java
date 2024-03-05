@@ -9,30 +9,47 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
-@Transactional
+
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
+
     @Override
     public List<UserDto> getUser() {
         List<User> users = repository.findAll();
         return UserMapper.mapToListUserDto(users);
     }
 
-    public UserDto getUserById(int id){
+    public UserDto getUserById(int id) {
         User users = repository.getById(id);
-        return UserMapper.mapToListUserDto(users);
+        return UserMapper.mapToUserDto(users);
     }
 
+    @Transactional
     @Override
-    public UserDto saveUser(UserDto userDto) {
-         User user = repository.save(UserMapper.mapToNewUser(userDto));
-         return UserMapper.mapToListUserDto(user);
+    public UserDto save(UserDto userDto) {
+        User user = repository.save(UserMapper.mapToNewUser(userDto));
+        return UserMapper.mapToUserDto(user);
     }
-
+    @Transactional
     @Override
-    public void deleteUser(long userId, long itemId) {
+    public void deleteUser(int userId) {
+        repository.deleteById(userId);
+    }
+    @Transactional
+    @Override
+    public UserDto patchUser(int id, UserDto userRequest) {
+        User existingUser = repository.getById(id);
+        if (userRequest.getName() != null) {
+            existingUser.setName(userRequest.getName());
+        }
+        if (userRequest.getEmail() != null) {
+            existingUser.setEmail(userRequest.getEmail());
+        }
+        User updatedUser = repository.save(existingUser);
 
+        return UserMapper.mapToUserDto(updatedUser);
     }
 }

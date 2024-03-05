@@ -10,7 +10,7 @@ import java.util.*;
 
 @Service
 @Slf4j
-public class ItemRepositoryImpl implements ItemRepository {
+public class InMemoryItemRepositoryImpl implements InMemoryItemRepository {
     private Map<Integer, Item> itemList = new HashMap<>();
     private Map<Integer, List<Item>> userItemIndex = new LinkedHashMap<>();
 

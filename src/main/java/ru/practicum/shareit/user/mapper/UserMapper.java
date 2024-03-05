@@ -9,7 +9,7 @@ import java.util.List;
 
 @UtilityClass
 public class UserMapper {
-    public static UserDto mapToListUserDto(User user) {
+    public static UserDto mapToUserDto(User user) {
         return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
 
@@ -21,11 +21,12 @@ public class UserMapper {
         List<UserDto> result = new ArrayList<>();
 
         for (User user : users) {
-            result.add(mapToListUserDto(user));
+            result.add(mapToUserDto(user));
         }
 
         return result;
     }
+
     public static User mapToNewUser(UserDto userDto) {
         User user = new User(userDto.getName(), userDto.getEmail());
         return user;

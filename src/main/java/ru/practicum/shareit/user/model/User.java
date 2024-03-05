@@ -10,7 +10,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", schema = "public")
 @Getter
 @Setter
 @ToString

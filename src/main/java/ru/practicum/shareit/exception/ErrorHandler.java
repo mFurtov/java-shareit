@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.persistence.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
@@ -14,7 +16,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse notFoundException(final RuntimeException e) {
         log.debug("Искомый объект не найден 404 Not found {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse("Искомый объект не найден");
     }
 
     @ExceptionHandler()
@@ -24,11 +26,11 @@ public class ErrorHandler {
         return new ErrorResponse("Ошибка валидации");
     }
 
-    @ExceptionHandler()
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse emailConflictException(final EmailUniqueException e) {
+    public ErrorResponse emailConflictException(final RuntimeException e) {
         log.debug("Конфликт запроса 409 Conflict {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse("Конфликт запроса");
     }
 
     @ExceptionHandler()
