@@ -6,7 +6,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.itemDao.ItemRepository;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserService;
+//import ru.practicum.shareit.user.InMemoryUserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ItemService {
-    private final UserService userService;
+//    private final InMemoryUserService inMemoryUserService;
     private final ItemRepository itemRepository;
 
     public List<ItemDto> getItem(int id) {
@@ -41,13 +41,13 @@ public class ItemService {
         return itemDto;
     }
 
-    public ItemDto postItem(int userId, ItemDto itemDto) {
-        User user = UserMapper.fromUserDto(userService.userGetId(userId));
-        return ItemMapper.toItemDto(itemRepository.postItem(ItemMapper.fromItemDto(itemDto, user)));
-    }
-
-    public ItemDto patchItem(int userId, int id, ItemDto itemDto) {
-        User user = UserMapper.fromUserDto(userService.userGetId(userId));
-        return ItemMapper.toItemDto(itemRepository.patchItem(userId, id,itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable()));
-    }
+//    public ItemDto postItem(int userId, ItemDto itemDto) {
+//        User user = UserMapper.fromUserDto(inMemoryUserService.userGetId(userId));
+//        return ItemMapper.toItemDto(itemRepository.postItem(ItemMapper.fromItemDto(itemDto, user)));
+//    }
+//
+//    public ItemDto patchItem(int userId, int id, ItemDto itemDto) {
+//        User user = UserMapper.fromUserDto(inMemoryUserService.userGetId(userId));
+//        return ItemMapper.toItemDto(itemRepository.patchItem(userId, id,itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable()));
+//    }
 }

@@ -38,18 +38,18 @@ public class ItemController {
         return itemList;
     }
 
-    @PostMapping
-    public ItemDto postItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Validated({Create.class}) @RequestBody ItemDto item) {
-        ItemDto itemPost = itemService.postItem(userId, item);
-        log.info("Предмет с id \"{}\" добавлен", itemPost.getId());
-        return itemPost;
-    }
-
-    @PatchMapping("/{id}")
-    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemDto itemRequest) {
-        ItemDto item = itemService.patchItem(userId, id, itemRequest);
-        log.info("Предмет с id \"{}\" обновлен", item.getId());
-        return item;
-    }
-
+//    @PostMapping
+//    public ItemDto postItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Validated({Create.class}) @RequestBody ItemDto item) {
+//        ItemDto itemPost = itemService.postItem(userId, item);
+//        log.info("Предмет с id \"{}\" добавлен", itemPost.getId());
+//        return itemPost;
+//    }
+//
+//    @PatchMapping("/{id}")
+//    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemDto itemRequest) {
+//        ItemDto item = itemService.patchItem(userId, id, itemRequest);
+//        log.info("Предмет с id \"{}\" обновлен", item.getId());
+//        return item;
+//    }
+//
 }
