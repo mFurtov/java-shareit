@@ -14,19 +14,20 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @CollectionTable(name = "name")
+    @Column(name = "name")
     private String name;
-    @CollectionTable(name = "description")
+    @Column(name = "description")
     private String description;
-    @CollectionTable(name = "available")
+    @Column(name = "is_available")
     private Boolean available;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @ToString.Exclude
     private User owner;
     @Transient
     private ItemRequest request;
-
-    public Item(String name, String description, Boolean available, User owner) {
+    public Item() {
+    }
+    public Item(int id, String name, String description, Boolean available, User owner) {
         this.name = name;
         this.description = description;
         this.available = available;

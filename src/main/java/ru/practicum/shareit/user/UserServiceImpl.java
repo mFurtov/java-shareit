@@ -12,7 +12,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
@@ -27,18 +26,18 @@ public class UserServiceImpl implements UserService {
         return UserMapper.mapToUserDto(users);
     }
 
-    @Transactional
+
     @Override
     public UserDto save(UserDto userDto) {
         User user = repository.save(UserMapper.mapToNewUser(userDto));
         return UserMapper.mapToUserDto(user);
     }
-    @Transactional
+
     @Override
     public void deleteUser(int userId) {
         repository.deleteById(userId);
     }
-    @Transactional
+
     @Override
     public UserDto patchUser(int id, UserDto userRequest) {
         User existingUser = repository.getById(id);
