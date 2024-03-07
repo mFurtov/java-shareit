@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto getUserById(int id) {
         User users = repository.getById(id);
+//        users.toString();
         return UserMapper.mapToUserDto(users);
     }
 

@@ -1,32 +1,34 @@
 package ru.practicum.shareit.booking.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.booking.modul.DataValidEndtAnnotation;
+import ru.practicum.shareit.booking.modul.DataValidStartAnnotation;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingDto {
     private int id;
     @NotBlank(groups = Create.class)
+    @DataValidStartAnnotation(groups = Create.class)
     private LocalDateTime start;
     @NotBlank(groups = Create.class)
+    @DataValidEndtAnnotation(groups = Create.class)
     private LocalDateTime end;
     @NotBlank(groups = Create.class)
-    private Item item;
-    private User booker;
+    private ItemDto item;
+    private UserDto booker;
     private BookingStatus status;
 
-    public BookingDto(int id, LocalDateTime start, LocalDateTime end, Item item, User booker, BookingStatus status) {
-        this.id = id;
-        this.start = start;
-        this.end = end;
-        this.item = item;
-        this.booker = booker;
-        this.status = status;
-    }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
-import org.springframework.dao.DataIntegrityViolationException;
+
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
@@ -16,21 +16,21 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse notFoundException(final RuntimeException e) {
         log.debug("Искомый объект не найден 404 Not found {}", e.getMessage());
-        return new ErrorResponse("Искомый объект не найден");
+        return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler()
+    @ExceptionHandler({ValidException.class,MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse validCountException(final MethodArgumentNotValidException e) {
+    public ErrorResponse validCountException(final RuntimeException e) {
         log.debug("Ошибка валидации 400 Bad request {}", e.getMessage());
         return new ErrorResponse("Ошибка валидации");
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ExceptionHandler()
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse emailConflictException(final RuntimeException e) {
+    public ErrorResponse emailConflictException(final EmailUniqueException e) {
         log.debug("Конфликт запроса 409 Conflict {}", e.getMessage());
-        return new ErrorResponse("Конфликт запроса");
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler()

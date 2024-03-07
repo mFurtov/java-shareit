@@ -13,6 +13,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Slf4j
@@ -33,10 +34,18 @@ public class ItemServiceImpl implements ItemService {
         Item item = repository.getById(id);
         return ItemMapper.maToItemDto(item);
     }
+
+    @Override
     public Item getItemNDto(int id) {
-        return repository.getById(id);
+        try {
+            Item item = repository.getById(id);
+            item.toString();
+            return item;
+        } catch (EntityNotFoundException ex) {
+            throw new EntityNotFoundException("Искомый обьект не найден");
+        }
     }
-    @PostMapping
+
     @Override
     public ItemDto postItem(int userId, ItemDto itemDto) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
