@@ -23,7 +23,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validCountException(final RuntimeException e) {
         log.debug("Ошибка валидации 400 Bad request {}", e.getMessage());
-        return new ErrorResponse("Ошибка валидации");
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler()

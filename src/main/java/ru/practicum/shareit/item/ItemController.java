@@ -25,8 +25,8 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDto getItemId(@PathVariable int id) {
-        ItemDto item = itemService.getItemId(id);
+    public ItemDto getItemId(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId,@PathVariable int id) {
+        ItemDto item = itemService.getItemId(userId,id);
         log.info("Предмет с id \"{}\" выведен", id);
         return item;
     }

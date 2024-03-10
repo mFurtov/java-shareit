@@ -7,9 +7,8 @@ import ru.practicum.shareit.Create;
 import ru.practicum.shareit.HeaderConstants;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
-import ru.practicum.shareit.user.model.User;
 
-import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -17,19 +16,29 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService service;
+
     @PostMapping
-    public BookingDto postBooking(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int id,@Validated(Create.class) @RequestBody BookingDtoRequest bookingDtoRequest) {
-        return service.postBooking(id,bookingDtoRequest);
+    public BookingDto postBooking(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int id, @Validated(Create.class) @RequestBody BookingDtoRequest bookingDtoRequest) {
+        return service.postBooking(id, bookingDtoRequest);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto patchBookingApproved(@RequestHeader(HeaderConstants.X_SHARER_USER_ID)int userId, @PathVariable int bookingId, @RequestParam boolean approved){
-       return service.patchBookingApproved(userId,bookingId,approved);
+    public BookingDto patchBookingApproved(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int bookingId, @RequestParam boolean approved) {
+        return service.patchBookingApproved(userId, bookingId, approved);
     }
 
     @GetMapping("/{id}")
-    public BookingDto getBooking(@PathVariable int bookingId){
+    public BookingDto getBooking(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @PathVariable int id) {
+        return service.getBooking(requestId, id);
+    }
 
+    @GetMapping
+    public List<BookingDto> getBookingWithStatus(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @RequestParam (defaultValue = "ALL") String state){
+        return service.getBookingWithStatus(requestId,state);
+    }
+    @GetMapping("/owner")
+    public List<BookingDto> getBookingWithStatusOwner(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @RequestParam (defaultValue = "ALL") String state){
+        return service.getBookingWithStatusOwner(requestId,state);
     }
 
 }
