@@ -11,16 +11,15 @@ import java.util.List;
 @UtilityClass
 public class ItemMapper {
     public ItemDto maToItemDto(Item item) {
-        return new ItemDto(item.getId(),item.getName(), item.getDescription(), item.getAvailable());
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
     }
 
     public Item mapFromItemDto(ItemDto item, User user) {
         return new Item(item.getId(), item.getName(), item.getDescription(), item.getAvailable(), user);
     }
 
-    public  List<ItemDto> mapToListItemDto(Iterable<Item> items) {
+    public List<ItemDto> mapToListItemDto(Iterable<Item> items) {
         List<ItemDto> result = new ArrayList<>();
-
         for (Item item : items) {
             result.add(maToItemDto(item));
         }

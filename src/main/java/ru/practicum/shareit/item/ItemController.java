@@ -6,6 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.HeaderConstants;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class ItemController {
     }
 
     @GetMapping("/{id}")
-    public ItemDto getItemId(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId,@PathVariable int id) {
-        ItemDto item = itemService.getItemId(userId,id);
+    public ItemDto getItemId(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id) {
+        ItemDto item = itemService.getItemId(userId, id);
         log.info("Предмет с id \"{}\" выведен", id);
         return item;
     }
@@ -50,6 +52,13 @@ public class ItemController {
         ItemDto item = itemService.patchItem(userId, id, itemRequest);
         log.info("Предмет с id \"{}\" обновлен", item.getId());
         return item;
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public CommentDto postComments(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int itemId, @Validated({Create.class}) @RequestBody CommentRequestDto commentRequestDto) {
+        CommentDto commentDto = itemService.postComments(userId, itemId, commentRequestDto);
+        log.info("Коментарий с id \"{}\" доавлен", commentDto.getId());
+        return commentDto;
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
-import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
@@ -18,7 +19,8 @@ public interface ItemService {
     ItemDto postItem(int userId, ItemDto itemDto);
 
     ItemDto patchItem(int userId, int id, ItemDto itemDto);
-    void setAvailable(Item item);
+
+    CommentDto postComments(int userId, int itemId, CommentRequestDto commentRequestDto);
 
 
 }

@@ -2,12 +2,13 @@ package ru.practicum.shareit.user.model;
 
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Objects;
-
+@NoArgsConstructor
 @Entity
 @Table(name = "users", schema = "public")
 @Getter
@@ -21,9 +22,7 @@ public class User {
     private String name;
     @Column(name = "email", nullable = false)
     private String email;
-    protected User() {
 
-    }
     public User(String name, String email) {
         this.name = name;
         this.email = email;

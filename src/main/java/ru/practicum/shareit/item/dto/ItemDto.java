@@ -2,11 +2,10 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 import ru.practicum.shareit.Create;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFromItem;
 
-import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 
 @Data
@@ -20,6 +19,8 @@ public class ItemDto {
     private Boolean available;
     private BookingDtoFromItem lastBooking;
     private BookingDtoFromItem nextBooking;
+
+    private List<CommentDto> comments;
 
     public ItemDto(int id, String name, String description, Boolean available) {
         this.id = id;

@@ -27,6 +27,7 @@ public class BookingDtoFromItem {
         this.end = end;
         this.bookerId = bookerId;
     }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 
+@NoArgsConstructor
 @Entity
 @Table(name = "items")
 @Data
@@ -20,14 +22,15 @@ public class Item {
     private String description;
     @Column(name = "is_available")
     private Boolean available;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private User owner;
     @Transient
     private ItemRequest request;
-    public Item() {
-    }
+
+
     public Item(int id, String name, String description, Boolean available, User owner) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
