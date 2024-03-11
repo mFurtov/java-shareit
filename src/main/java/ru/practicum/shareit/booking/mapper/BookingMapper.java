@@ -5,9 +5,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoFromItem;
 import ru.practicum.shareit.booking.modul.Booking;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
