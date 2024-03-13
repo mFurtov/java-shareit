@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.modul.Booking;
+import ru.practicum.shareit.item.model.Item;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
@@ -19,6 +20,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             throw new EntityNotFoundException("Объект не найден");
         }
     }
+
+    List<Booking> findByItemIn(List<Item> itemList);
 
     @Query("select b from Booking b join b.item i where b.id = ?2 and (b.booker.id = ?1 or i.owner.id = ?1)")
     Booking searchBooking(int requestId, int bookingId);

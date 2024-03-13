@@ -9,9 +9,9 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.Objects;
 
-@NoArgsConstructor
 @Entity
 @Table(name = "users", schema = "public")
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
