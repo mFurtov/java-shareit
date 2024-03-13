@@ -47,9 +47,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDto> getItem(int userId) {
         List<Item> item = itemRepository.findByOwnerIdOrderById(userId);
-        List<ItemDto> itemDto = new ArrayList<>();
-
-
         return addInfo(item);
     }
 
