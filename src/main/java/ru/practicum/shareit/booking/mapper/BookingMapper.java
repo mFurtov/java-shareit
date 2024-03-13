@@ -14,19 +14,11 @@ import java.util.List;
 @UtilityClass
 public class BookingMapper {
     public BookingDto mapToBookingDto(Booking booking) {
-        if (booking != null) {
-            return new BookingDto(booking.getId(), booking.getStart(), booking.getEnd(), ItemMapper.maToItemDto(booking.getItem()), UserMapper.mapToUserDto(booking.getBooker()), booking.getStatus());
-        } else {
-            throw new EntityNotFoundException("Объект не найден");
-        }
+        return new BookingDto(booking.getId(), booking.getStart(), booking.getEnd(), ItemMapper.maToItemDto(booking.getItem()), UserMapper.mapToUserDto(booking.getBooker()), booking.getStatus());
     }
 
     public BookingDtoFromItem mapToBookingDtoFromItem(Booking booking) {
-        if (booking != null) {
-            return new BookingDtoFromItem(booking.getId(), booking.getStart(), booking.getEnd(), booking.getBooker().getId());
-        } else {
-            throw new EntityNotFoundException("Объект не найден");
-        }
+        return new BookingDtoFromItem(booking.getId(), booking.getStart(), booking.getEnd(), booking.getBooker().getId());
     }
 
     public static List<BookingDto> mapToListUserDto(Iterable<Booking> bookings) {

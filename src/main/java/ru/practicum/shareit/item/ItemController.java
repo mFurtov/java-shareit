@@ -8,6 +8,7 @@ import ru.practicum.shareit.Create;
 import ru.practicum.shareit.HeaderConstants;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
@@ -41,14 +42,14 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto postItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Validated({Create.class}) @RequestBody ItemDto item) {
+    public ItemDto postItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Validated({Create.class}) @RequestBody ItemCreateDto item) {
         ItemDto itemPost = itemService.postItem(userId, item);
         log.info("Предмет с id \"{}\" добавлен", itemPost.getId());
         return itemPost;
     }
 
     @PatchMapping("/{id}")
-    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemDto itemRequest) {
+    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemCreateDto itemRequest) {
         ItemDto item = itemService.patchItem(userId, id, itemRequest);
         log.info("Предмет с id \"{}\" обновлен", item.getId());
         return item;

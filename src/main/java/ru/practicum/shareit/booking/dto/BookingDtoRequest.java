@@ -2,16 +2,17 @@ package ru.practicum.shareit.booking.dto;
 
 import lombok.Data;
 import ru.practicum.shareit.Create;
-import ru.practicum.shareit.booking.modul.DataValidEndtAnnotation;
-import ru.practicum.shareit.booking.modul.DataValidStartAnnotation;
+
+import ru.practicum.shareit.booking.modul.StartAndBeforeValid;
 
 import java.time.LocalDateTime;
 
 @Data
+@StartAndBeforeValid(groups = Create.class)
 public class BookingDtoRequest {
-    int itemId;
-    @DataValidStartAnnotation(groups = Create.class)
-    LocalDateTime start;
-    @DataValidEndtAnnotation(groups = Create.class)
-    LocalDateTime end;
+    private int itemId;
+
+    private LocalDateTime start;
+
+    private LocalDateTime end;
 }

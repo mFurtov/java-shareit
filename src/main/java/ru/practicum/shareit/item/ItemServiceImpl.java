@@ -11,6 +11,7 @@ import ru.practicum.shareit.exception.OwnerException;
 import ru.practicum.shareit.exception.ValidException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.itemDao.CommentRepository;
 import ru.practicum.shareit.item.itemDao.ItemRepository;
@@ -33,7 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
     private final UserService userService;
-    private final ItemRepository repository;
+    private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
@@ -42,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> getItem(int userId) {
-        List<Item> item = repository.findByOwnerIdOrderById(userId);
+        List<Item> item = itemRepository.findByOwnerIdOrderById(userId);
         List<ItemDto> itemDto = new ArrayList<>();
         for (Item i : item) {
             itemDto.add(addInfo(i, userId, i.getId()));
@@ -52,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDto getItemId(int userId, int id) {
-        Item item = repository.getById(id);
+        Item item = itemRepository.getById(id);
         ItemDto itemDto = addInfo(item, userId, id);
         return itemDto;
     }
@@ -73,7 +74,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item getItemNDto(int id) {
         try {
-            Item item = repository.getById(id);
+            Item item = itemRepository.getById(id);
             item.toString();
             return item;
         } catch (EntityNotFoundException ex) {
@@ -83,14 +84,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto postItem(int userId, ItemDto itemDto) {
+    public ItemDto postItem(int userId, ItemCreateDto itemDto) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        return ItemMapper.maToItemDto(repository.save(ItemMapper.mapFromItemDto(itemDto, user)));
+        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user)));
     }
 
     @Override
-    public ItemDto patchItem(int userId, int id, ItemDto itemDto) {
-        Item item = repository.getById(id);
+    public ItemDto patchItem(int userId, int id, ItemCreateDto itemDto) {
+        Item item = itemRepository.getById(id);
 
         if (item.getOwner().getId() == userId) {
             if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
@@ -107,19 +108,18 @@ public class ItemServiceImpl implements ItemService {
             throw new OwnerException("Доступ к предмету отсутствует, указан неверный владелец");
         }
 
-        return ItemMapper.maToItemDto(repository.save(item));
+        return ItemMapper.maToItemDto(itemRepository.save(item));
     }
 
     public List<ItemDto> searchItems(String search) {
-        return ItemMapper.mapToListItemDto(repository.search(search));
+        return ItemMapper.mapToListItemDto(itemRepository.search(search));
     }
 
 
     public CommentDto postComments(int userId, int id, CommentRequestDto commentRequestDto) {
-        Item item = repository.getById(id);
+        Item item = itemRepository.getById(id);
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        List<Booking> bookings = checkBeforeComment(userId, id);
-        if (!bookings.isEmpty()) {
+        if (checkBeforeComment(userId, id)) {
             Comment comment = new Comment(commentRequestDto.getText(), item, user);
 
             return CommentMapper.mapToCommentDto(commentRepository.save(comment));
@@ -129,10 +129,9 @@ public class ItemServiceImpl implements ItemService {
         }
     }
 
-    private List<Booking> checkBeforeComment(int userId, int id) {
+    private boolean checkBeforeComment(int userId, int id) {
         dateTime = LocalDateTime.now();
-        List<Booking> bookings = bookingRepository.findByItemIdAndBookerIdAndStatusAndEndBefore(id, userId, BookingStatus.APPROVED, dateTime);
-        return bookings;
+        return bookingRepository.existsByItemIdAndBookerIdAndStatusAndEndBefore(id, userId, BookingStatus.APPROVED, dateTime);
 
     }
 }

@@ -28,9 +28,7 @@ public class Item {
     @Transient
     private ItemRequest request;
 
-
-    public Item(int id, String name, String description, Boolean available, User owner) {
-        this.id = id;
+    public Item(String name, String description, Boolean available, User owner) {
         this.name = name;
         this.description = description;
         this.available = available;

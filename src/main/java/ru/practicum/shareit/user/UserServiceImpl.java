@@ -40,10 +40,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto patchUser(int id, UserDto userRequest) {
         User existingUser = repository.getById(id);
-        if (userRequest.getName() != null) {
+        if (userRequest.getName() != null && !userRequest.getName().isBlank()) {
             existingUser.setName(userRequest.getName());
         }
-        if (userRequest.getEmail() != null) {
+
+        if (userRequest.getEmail() != null && !userRequest.getEmail().isBlank()) {
             existingUser.setEmail(userRequest.getEmail());
         }
         User updatedUser = repository.save(existingUser);
