@@ -11,10 +11,10 @@ import javax.validation.constraints.Size;
 @Data
 public class UserDto {
     private int id;
-    @Size(min = 1, max = 100, groups = Create.class)
+    @Size(min = 1, max = 100, groups = {Create.class, Update.class})
     @NotBlank(groups = Create.class)
     private String name;
-    @Size(min = 1, max = 500, groups = Create.class)
+    @Size(min = 1, max = 500, groups = {Create.class, Update.class})
     @Email(groups = {Create.class, Update.class})
     @NotBlank(groups = Create.class)
     private String email;

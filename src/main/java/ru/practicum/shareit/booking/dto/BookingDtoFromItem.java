@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Data
 public class BookingDtoFromItem {
-    int id;
+    private int id;
 
     private LocalDateTime start;
 

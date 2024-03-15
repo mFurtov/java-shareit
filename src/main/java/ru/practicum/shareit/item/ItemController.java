@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
 import ru.practicum.shareit.HeaderConstants;
+import ru.practicum.shareit.Update;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
@@ -49,7 +50,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @RequestBody ItemCreateDto itemRequest) {
+    public ItemDto patchItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id, @Validated({Update.class}) @RequestBody ItemCreateDto itemRequest) {
         ItemDto item = itemService.patchItem(userId, id, itemRequest);
         log.info("Предмет с id \"{}\" обновлен", item.getId());
         return item;

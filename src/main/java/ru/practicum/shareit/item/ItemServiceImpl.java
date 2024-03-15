@@ -24,7 +24,6 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -81,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
             List<Booking> bookingsForItem = allBookings.stream().filter(booking -> booking.getItem().getId() == itemDto.getId()).collect(Collectors.toList());
             bookingMap.put(itemDto, bookingsForItem);
             bookingsForItem.stream()
-                    .filter(b -> b.getStart().isBefore(dateTime))
+                    .filter(b -> !b.getStart().isAfter(dateTime))
                     .max(Comparator.comparing(Booking::getStart))
                     .ifPresent(lastBooking -> itemDto.setLastBooking(BookingMapper.mapToBookingDtoFromItem(lastBooking)));
 
@@ -102,14 +101,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item getItemNDto(int id) {
-        try {
-            Item item = itemRepository.getById(id);
-            item.toString();
-            return item;
-        } catch (EntityNotFoundException ex) {
-            log.error("Искомый обьект не найден");
-            throw new EntityNotFoundException("Искомый обьект не найден");
-        }
+        Item item = itemRepository.getById(id);
+        item.toString();
+        return item;
     }
 
     @Override

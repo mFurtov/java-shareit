@@ -72,23 +72,15 @@ public class BookingServiceImpl implements BookingService {
         UserDto user = userService.getUserById(requestId);
         final LocalDateTime dataNow = LocalDateTime.now();
 
-        BookingEnum stataToEnum = null;
-        try {
-            stataToEnum = BookingEnum.valueOf(state);
-        } catch (IllegalArgumentException e) {
-            log.error("Unknown state: UNSUPPORTED_STATUS");
-            throw new ValidException("Unknown state: UNSUPPORTED_STATUS");
-        }
-
-        switch (stataToEnum) {
+        switch (BookingEnum.getEnum(state)) {
             case ALL:
                 return BookingMapper.mapToListUserDto(bookingRepository.findByBookerIdOrderByStartDesc(requestId));
             case CURRENT:
                 return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case PAST:
-                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case FUTURE:
-                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case WAITING:
                 return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.WAITING, requestId));
             case REJECTED:
@@ -103,23 +95,15 @@ public class BookingServiceImpl implements BookingService {
         UserDto user = userService.getUserById(requestId);
         final LocalDateTime dataNow = LocalDateTime.now();
 
-        BookingEnum stataToEnum = null;
-        try {
-            stataToEnum = BookingEnum.valueOf(state);
-        } catch (IllegalArgumentException e) {
-            log.error("Unknown state: UNSUPPORTED_STATUS");
-            throw new ValidException("Unknown state: UNSUPPORTED_STATUS");
-        }
-
-        switch (stataToEnum) {
+        switch (BookingEnum.getEnum(state)) {
             case ALL:
                 return BookingMapper.mapToListUserDto(bookingRepository.findByItemOwnerIdOrderByStartDesc(requestId));
             case CURRENT:
                 return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case PAST:
-                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookingsOwner(dataNow, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case FUTURE:
-                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookingsOwner(dataNow, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
             case WAITING:
                 return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus.WAITING, requestId));
             case REJECTED:

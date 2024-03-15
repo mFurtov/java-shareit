@@ -39,11 +39,11 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findByBookerIdOrderByStartDesc(int id);
 
-    @Query("SELECT b FROM Booking b WHERE b.end  <= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED') order by b.start desc")
-    List<Booking> findPastBookings(LocalDateTime data, int id);
+    @Query("SELECT b FROM Booking b WHERE b.end  <= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
+    List<Booking> findPastBookings(LocalDateTime data, int id, Sort sort);
 
-    @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED') order by b.start desc")
-    List<Booking> findFutureBookings(LocalDateTime data, int id);
+    @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
+    List<Booking> findFutureBookings(LocalDateTime data, int id, Sort sort);
 
     List<Booking> findByStatusAndBookerIdOrderByStartDesc(BookingStatus status, int id);
 
@@ -56,11 +56,11 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     List<Booking> findByItemOwnerIdOrderByStartDesc(int id);
 
-    @Query("SELECT b FROM Booking b WHERE b.end <= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED') order by b.start desc")
-    List<Booking> findPastBookingsOwner(LocalDateTime data, int id);
+    @Query("SELECT b FROM Booking b WHERE b.end <= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
+    List<Booking> findPastBookingsOwner(LocalDateTime data, int id, Sort sort);
 
-    @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED') order by b.start desc")
-    List<Booking> findFutureBookingsOwner(LocalDateTime data, int id);
+    @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
+    List<Booking> findFutureBookingsOwner(LocalDateTime data, int id, Sort sort);
 
     List<Booking> findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus status, int id);
 }
