@@ -13,6 +13,6 @@ public enum BookingEnum {
     REJECTED;
 
     public static BookingEnum getEnum(String status) {
-        return Stream.of(BookingEnum.values()).filter(bookingEnum -> bookingEnum.name().equals(status)).findFirst().orElseThrow(() -> new ValidException("Unknown state: UNSUPPORTED_STATUS"));
+        return Stream.of(BookingEnum.values()).filter(bookingEnum -> bookingEnum.name().equalsIgnoreCase(status)).findFirst().orElseThrow(() -> new ValidException("Unknown state: UNSUPPORTED_STATUS"));
     }
 }
