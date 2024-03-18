@@ -1,53 +1,27 @@
 package ru.practicum.shareit.item;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.itemDao.ItemRepository;
-import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.UserService;
-import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class ItemService {
-    private final UserService userService;
-    private final ItemRepository itemRepository;
+public interface ItemService {
+    List<ItemDto> getItem(int id);
 
-    public List<ItemDto> getItem(int id) {
-        List<ItemDto> itemDto = new ArrayList<>();
-        List<Item> item = itemRepository.getItem(id);
-        for (Item i : item) {
-            itemDto.add(ItemMapper.toItemDto(i));
-        }
-        return itemDto;
-    }
+    ItemDto getItemId(int userId, int id);
 
-    public ItemDto getItemId(int id) {
-        return ItemMapper.toItemDto(itemRepository.getItemId(id));
-    }
+    Item getItemNDto(int id);
 
-    public List<ItemDto> searchItems(String search) {
-        List<ItemDto> itemDto = new ArrayList<>();
-        List<Item> item = itemRepository.searchItems(search);
-        for (Item i : item) {
-            itemDto.add(ItemMapper.toItemDto(i));
-        }
-        return itemDto;
-    }
+    List<ItemDto> searchItems(String search);
 
-    public ItemDto postItem(int userId, ItemDto itemDto) {
-        User user = UserMapper.fromUserDto(userService.userGetId(userId));
-        return ItemMapper.toItemDto(itemRepository.postItem(ItemMapper.fromItemDto(itemDto, user)));
-    }
+    ItemDto postItem(int userId, ItemCreateDto itemDto);
 
-    public ItemDto patchItem(int userId, int id, ItemDto itemDto) {
-        User user = UserMapper.fromUserDto(userService.userGetId(userId));
-        return ItemMapper.toItemDto(itemRepository.patchItem(userId, id,itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable()));
-    }
+    ItemDto patchItem(int userId, int id, ItemCreateDto itemDto);
+
+    CommentDto postComments(int userId, int itemId, CommentRequestDto commentRequestDto);
+
+
 }

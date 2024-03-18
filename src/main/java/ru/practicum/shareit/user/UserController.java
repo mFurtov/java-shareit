@@ -15,39 +15,39 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @Slf4j
 public class UserController {
-    private final UserService userService;
-
-    @GetMapping
-    public List<UserDto> userGetAll() {
-        List<UserDto> userList = userService.userGetAll();
-        log.info("Выведен список пользователей. он равен \"{}\"", userList.size());
-        return userList;
-    }
+    private final UserService service;
 
     @GetMapping("/{id}")
-    public UserDto userGetId(@PathVariable int id) {
-        UserDto user = userService.userGetId(id);
+    public UserDto userGetUser(@PathVariable int id) {
+        UserDto userDto = service.getUserById(id);
         log.info("Выведен пользователь с id \"{}\"", id);
-        return user;
+        return userDto;
+    }
+
+    @GetMapping()
+    public List<UserDto> userGet() {
+        List<UserDto> userList = service.getUser();
+        log.info("Выведен список пользователей. он равен \"{}\"", userList.size());
+        return service.getUser();
     }
 
     @PostMapping
     public UserDto postUser(@Validated(Create.class) @RequestBody UserDto user) {
-        UserDto userPost = userService.postUser(user);
+        UserDto userPost = service.save(user);
         log.info("Пользователь с id \"{}\" добавлен", userPost.getId());
         return userPost;
     }
 
     @PatchMapping("/{id}")
     public UserDto patchUser(@PathVariable int id, @Validated(Update.class) @RequestBody UserDto userRequest) {
-        UserDto userPost = userService.patchUser(id, userRequest.getName(), userRequest.getEmail());
-        log.info("Пользователь с id \"{}\" обновлен", userPost.getId());
-        return userPost;
+        UserDto userDto = service.patchUser(id, userRequest);
+        log.info("Пользователь с id \"{}\" обновлен", userDto.getId());
+        return userDto;
     }
 
     @DeleteMapping("/{id}")
     public void dellUser(@PathVariable int id) {
-        userService.dellUser(id);
+        service.deleteUser(id);
         log.info("Пользователь с id \"{}\" удален", id);
     }
 }
