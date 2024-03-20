@@ -2,8 +2,8 @@ package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.itemDao.ItemRepository;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
@@ -14,10 +14,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,20 +39,19 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Override
     public List<ItemRequestDto> getRequest(int userId) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
-
         Map<Integer, ItemRequest> itemRequestMap = repository.findByRequestorId(userId).stream().collect(Collectors.toMap(ItemRequest::getId, itemRequest -> itemRequest));
-        Map<Integer, Item> mapItems = itemRepository.findByRequestId(userId).stream().collect(Collectors.toMap(item -> item.getRequest().getId(), item -> item));
+        List<Integer> idRequestMap = itemRequestMap.values().stream().map(ItemRequest::getId).collect(Collectors.toList());
+        Map<Integer, List<Item>> mapItems = itemRepository.findByRequestIdIn(idRequestMap).stream().collect(Collectors.groupingBy(item -> item.getRequest().getId()));
         List<ItemRequestDto> itemRequests = new ArrayList<>();
-        for(Integer i: itemRequestMap.keySet()){
+        for (Integer i : itemRequestMap.keySet()) {
+            ItemRequestDto itemRequest = ItemRequestsMapper.mapFromItemRequest(itemRequestMap.get(i));
             if (mapItems.containsKey(i)) {
-                ItemRequestDto itemRequest = ItemRequestsMapper.mapFromItemRequest(itemRequestMap.get(i));
-                Item item = mapItems.get(i);
-                itemRequest.setItem(item);
-                itemRequests.add(itemRequest);
+                itemRequest.setItems(ItemMapper.mapToListRequstDto(mapItems.get(i)));
             }
+            itemRequests.add(itemRequest);
         }
-
-
+        Comparator<ItemRequestDto> comparator = Comparator.comparing(ItemRequestDto::getCreated).reversed();
+        Collections.sort(itemRequests, comparator);
         return itemRequests;
     }
 

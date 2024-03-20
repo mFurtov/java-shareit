@@ -164,7 +164,5 @@ public class ItemServiceImpl implements ItemService {
         return bookingRepository.existsByItemIdAndBookerIdAndStatusAndEndBefore(id, userId, BookingStatus.APPROVED, dateTime);
     }
 
-    public List<Item> findByRequestId(int id){
-        return itemRepository.findByRequestId(id);
-    }
+
 }
