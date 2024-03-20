@@ -18,4 +18,6 @@ public class ItemCreateDto {
     private String description;
     @NotNull(groups = Create.class)
     private Boolean available;
+
+    private int requestId;
 }

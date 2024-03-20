@@ -7,13 +7,14 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+
 @UtilityClass
 public class ItemRequestsMapper {
-    public ItemRequest mapToItemRequest(ItemRequestCreateDto itemRequestCreateDto, User user){
-        return new ItemRequest(itemRequestCreateDto.getDescription(),user, LocalDateTime.now());
+    public ItemRequest mapToItemRequest(ItemRequestCreateDto itemRequestCreateDto, User user) {
+        return new ItemRequest(itemRequestCreateDto.getDescription(), user, LocalDateTime.now());
     }
 
-    public ItemRequestDto mapFromItemRequest(ItemRequest itemRequest){
-        return new ItemRequestDto(itemRequest.getId(),itemRequest.getDescription(),itemRequest.getCreated());
+    public ItemRequestDto mapFromItemRequest(ItemRequest itemRequest) {
+        return new ItemRequestDto(itemRequest.getId(), itemRequest.getDescription(), itemRequest.getCreated());
     }
 }

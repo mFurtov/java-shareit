@@ -8,6 +8,8 @@ import ru.practicum.shareit.HeaderConstants;
 import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -18,5 +20,10 @@ public class ItemRequestController {
     @PostMapping
     public ItemRequestDto postRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Validated(Create.class) @RequestBody ItemRequestCreateDto itemRequestCreateDto) {
         return itemRequestService.postRequest(userId, itemRequestCreateDto);
+    }
+
+    @GetMapping
+    public List<ItemRequestDto> getRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId){
+        return itemRequestService.getRequest(userId);
     }
 }

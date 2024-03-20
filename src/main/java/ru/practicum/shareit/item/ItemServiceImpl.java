@@ -20,6 +20,10 @@ import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.ItemRequestServiceImpl;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.modul.ItemRequest;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -39,6 +43,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+
+    private final ItemRequestService itemRequestService;
 
     private LocalDateTime dateTime = null;
 
@@ -109,7 +115,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto postItem(int userId, ItemCreateDto itemDto) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user)));
+        ItemRequest itemRequest = itemRequestService.getAllRequest(itemDto.getRequestId());
+        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user,itemRequest)));
     }
 
     @Override
@@ -155,6 +162,9 @@ public class ItemServiceImpl implements ItemService {
     private boolean checkBeforeComment(int userId, int id) {
         dateTime = LocalDateTime.now();
         return bookingRepository.existsByItemIdAndBookerIdAndStatusAndEndBefore(id, userId, BookingStatus.APPROVED, dateTime);
+    }
 
+    public List<Item> findByRequestId(int id){
+        return itemRepository.findByRequestId(id);
     }
 }

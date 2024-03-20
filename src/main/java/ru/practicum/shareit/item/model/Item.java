@@ -25,14 +25,17 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @ToString.Exclude
     private User owner;
-    @Transient
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "request_id")
+    @ToString.Exclude
     private ItemRequest request;
 
-    public Item(String name, String description, Boolean available, User owner) {
+    public Item(String name, String description, Boolean available, User owner, ItemRequest itemRequest) {
         this.name = name;
         this.description = description;
         this.available = available;
         this.owner = owner;
+        this.request = itemRequest;
 
     }
 }

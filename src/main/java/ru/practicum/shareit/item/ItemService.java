@@ -23,5 +23,7 @@ public interface ItemService {
 
     CommentDto postComments(int userId, int itemId, CommentRequestDto commentRequestDto);
 
+    List<Item> findByRequestId(int id);
+
 
 }
