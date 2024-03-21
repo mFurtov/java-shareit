@@ -11,4 +11,5 @@ public interface ItemRequestService {
     ItemRequestDto postRequest(int userId, ItemRequestCreateDto itemRequestCreateDto);
     ItemRequest getAllRequest(int id);
     List<ItemRequestDto> getRequest(int userId);
+    List<ItemRequestDto> getAllRequest(int userId, int from, Integer size);
 }
