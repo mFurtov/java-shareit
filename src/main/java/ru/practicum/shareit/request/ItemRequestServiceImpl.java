@@ -74,6 +74,4 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         Collections.sort(itemRequests, comparator);
         return itemRequests;
     }
-
-
 }

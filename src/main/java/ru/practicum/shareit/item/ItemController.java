@@ -27,8 +27,9 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
-
-        return itemService.findByOwnerId(userId, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
+        List<ItemDto> item = itemService.findByOwnerId(userId, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
+        log.info("Выведен список предметов размером \"{}\" ", item.size());
+        return item;
     }
 
     @GetMapping("/{id}")
