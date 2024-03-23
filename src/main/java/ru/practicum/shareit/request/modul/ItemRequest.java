@@ -1,7 +1,6 @@
 package ru.practicum.shareit.request.modul;
 
 import lombok.*;
-import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;

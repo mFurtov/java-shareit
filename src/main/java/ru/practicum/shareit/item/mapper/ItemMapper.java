@@ -15,12 +15,13 @@ import java.util.List;
 public class ItemMapper {
     public ItemDto maToItemDto(Item item) {
         int requestId = (item.getRequest() != null) ? item.getRequest().getId() : 0;
-        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(),requestId);
+        return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(), requestId);
     }
 
     public ItemToRequestDto mapItemToRequstDto(Item item) {
-        return new ItemToRequestDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(),item.getRequest().getId());
+        return new ItemToRequestDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable(), item.getRequest().getId());
     }
+
     public List<ItemToRequestDto> mapToListRequstDto(Iterable<Item> items) {
         List<ItemToRequestDto> result = new ArrayList<>();
         for (Item item : items) {
@@ -30,7 +31,7 @@ public class ItemMapper {
     }
 
     public Item mapFromItemDto(ItemCreateDto item, User user, ItemRequest itemRequest) {
-        return new Item(item.getName(), item.getDescription(), item.getAvailable(), user , itemRequest);
+        return new Item(item.getName(), item.getDescription(), item.getAvailable(), user, itemRequest);
     }
 
     public List<ItemDto> mapToListItemDto(Iterable<Item> items) {
