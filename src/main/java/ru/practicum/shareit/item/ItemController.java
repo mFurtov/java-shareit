@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Create;
@@ -11,7 +12,10 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.pageable.PageableCreate;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,10 +26,9 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<ItemDto> getItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int id) {
-        List<ItemDto> itemList = itemService.getItem(id);
-        log.info("Предметы пользователя \"{}\" выведены", id);
-        return itemList;
+    public List<ItemDto> getItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
+
+        return itemService.findByOwnerId(userId, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
     }
 
     @GetMapping("/{id}")
@@ -36,8 +39,8 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam String text) {
-        List<ItemDto> itemList = itemService.searchItems(text);
+    public List<ItemDto> searchItems(@RequestParam String text, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
+        List<ItemDto> itemList = itemService.searchItems(text, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
         log.info("Поиск по запросу \"{}\" был выведен", text);
         return itemList;
     }
@@ -59,7 +62,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto postComments(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int itemId, @Validated({Create.class}) @RequestBody CommentRequestDto commentRequestDto) {
         CommentDto commentDto = itemService.postComments(userId, itemId, commentRequestDto);
-        log.info("Коментарий с id \"{}\" доавлен", commentDto.getId());
+        log.info("Комментарий с id \"{}\" доавлен", commentDto.getId());
         return commentDto;
     }
 

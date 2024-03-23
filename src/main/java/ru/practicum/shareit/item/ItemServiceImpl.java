@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingStatus;
@@ -21,8 +22,6 @@ import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.ItemRequestService;
-import ru.practicum.shareit.request.ItemRequestServiceImpl;
-import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.request.modul.ItemRequest;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
@@ -48,12 +47,6 @@ public class ItemServiceImpl implements ItemService {
 
     private LocalDateTime dateTime = null;
 
-
-    @Override
-    public List<ItemDto> getItem(int userId) {
-        List<Item> item = itemRepository.findByOwnerIdOrderById(userId);
-        return addInfo(item);
-    }
 
     @Override
     public ItemDto getItemId(int userId, int id) {
@@ -116,7 +109,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto postItem(int userId, ItemCreateDto itemDto) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
         ItemRequest itemRequest = itemRequestService.getAllRequest(itemDto.getRequestId());
-        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user,itemRequest)));
+        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user, itemRequest)));
     }
 
     @Override
@@ -141,8 +134,8 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.maToItemDto(itemRepository.save(item));
     }
 
-    public List<ItemDto> searchItems(String search) {
-        return ItemMapper.mapToListItemDto(itemRepository.search(search));
+    public List<ItemDto> searchItems(String search, Pageable pageable) {
+        return ItemMapper.mapToListItemDto(itemRepository.search(search, pageable));
     }
 
 
@@ -157,6 +150,12 @@ public class ItemServiceImpl implements ItemService {
             log.error("Ошиба валидации");
             throw new ValidException("Ошиба валидации");
         }
+    }
+
+    @Override
+    public List<ItemDto> findByOwnerId(int userId, Pageable pageable) {
+        List<Item> items = itemRepository.findAllByOwnerId(userId, pageable);
+        return addInfo(items);
     }
 
     private boolean checkBeforeComment(int userId, int id) {

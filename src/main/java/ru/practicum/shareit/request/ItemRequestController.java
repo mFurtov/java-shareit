@@ -9,9 +9,9 @@ import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+@Validated
 
 @RestController
 @RequestMapping(path = "/requests")
@@ -25,12 +25,17 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequestDto> getRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) @Validated(Create.class) int userId){
+    public List<ItemRequestDto> getRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) @Validated(Create.class) int userId) {
         return itemRequestService.getRequest(userId);
     }
+
     @GetMapping("/all")
-    public List<ItemRequestDto> getAllRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @Min(0) @RequestParam(defaultValue = "0") int from, @PositiveOrZero @RequestParam(required = false) @PositiveOrZero  Integer size){
-        return itemRequestService.getAllRequest(userId,from,size);
+    public List<ItemRequestDto> getAllRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @Min(0) int from, @RequestParam(required = false) @Min(1) Integer size) {
+        return itemRequestService.getAllRequest(userId, from, size);
     }
 
+    @GetMapping("/{id}")
+    public ItemRequestDto getRequestById(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userI, @PathVariable int id) {
+        return itemRequestService.getRequestById(userI, id);
+    }
 }

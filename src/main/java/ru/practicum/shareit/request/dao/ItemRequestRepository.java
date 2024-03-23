@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Integer> {
     List<ItemRequest> findByRequestorId(int id);
-@Query("select r from ItemRequest r where requestor.id != ?1")
+
+    @Query("select r from ItemRequest r where requestor.id != ?1")
     List<ItemRequest> getAllRequest(int id, Sort sort);
 }
