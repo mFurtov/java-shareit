@@ -9,14 +9,8 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Integer> {
-    List<Item> findByOwnerIdOrderById(int id);
-
-    List<Item> findByOwnerId(int id);
 
     List<Item> findAllByOwnerId(int ownerId, Pageable pageable);
-
-    @Query("select i from Item i")
-    Page<Item> findById(Pageable pageable);
 
     @Query("SELECT i FROM Item i " +
             "WHERE (UPPER(i.name) LIKE UPPER(CONCAT('%', ?1, '%')) OR UPPER(i.description) LIKE UPPER(CONCAT('%', ?1, '%'))) " +

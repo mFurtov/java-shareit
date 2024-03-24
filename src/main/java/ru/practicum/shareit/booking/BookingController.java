@@ -38,8 +38,8 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public BookingDto getBooking(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @PathVariable int id) {
-        BookingDto bookingDto = service.getBooking(requestId, id);
+    public BookingDto getBooking(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @PathVariable int id) {
+        BookingDto bookingDto = service.getBooking(userId, id);
         log.info("Заказ c id \"{}\" выведен", bookingDto.getId());
         return bookingDto;
     }

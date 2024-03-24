@@ -29,7 +29,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     default Booking searchBookingOrThrow(int requestId, int bookingId) {
         Booking booking = searchBooking(requestId, bookingId);
         if (booking == null) {
-            throw new EntityNotFoundException("Обьект не найден");
+            throw new EntityNotFoundException("Объект не найден");
         }
         return booking;
     }

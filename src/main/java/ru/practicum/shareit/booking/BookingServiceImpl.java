@@ -60,9 +60,9 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    public BookingDto getBooking(int requestId, int bookingId) {
+    public BookingDto getBooking(int userId, int bookingId) {
         bookingRepository.findByIdOrThrow(bookingId);
-        return BookingMapper.mapToBookingDto(bookingRepository.searchBookingOrThrow(requestId, bookingId));
+        return BookingMapper.mapToBookingDto(bookingRepository.searchBookingOrThrow(userId, bookingId));
 
 
     }
