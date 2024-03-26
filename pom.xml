@@ -67,11 +67,7 @@
             <version>6.2.5.Final</version>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+
     </dependencies>
 
     <build>

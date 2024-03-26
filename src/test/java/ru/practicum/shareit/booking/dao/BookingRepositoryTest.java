@@ -19,6 +19,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@DirtiesContext
 class BookingRepositoryTest {
     @Autowired
     private BookingRepository bookingRepository;

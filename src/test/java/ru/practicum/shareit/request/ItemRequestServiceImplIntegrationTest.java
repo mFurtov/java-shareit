@@ -18,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class ItemRequestServiceImplIntegrationTest {
     @Autowired
     private ItemRequestService itemRequestService;
@@ -30,6 +29,7 @@ class ItemRequestServiceImplIntegrationTest {
     private ItemRepository itemRepository;
 
     @Test
+    @Transactional
     public void getAllRequestPage() {
         User user = new User("test", "test@ya.ru");
         User userSearch = new User("test2", "test@ya.ru");

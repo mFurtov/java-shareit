@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.booking.BookingStatus;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.modul.Booking;
@@ -23,7 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+@DirtiesContext
 class ItemServiceImpIntegrationTest {
     @Autowired
     private ItemService itemService;
@@ -37,7 +37,6 @@ class ItemServiceImpIntegrationTest {
     ItemRequestRepository itemRequestRepository;
 
     @Test
-    @Transactional
     public void getItems() {
         User owner = new User("test", "test@ya.ru");
         User requestor = new User("test2", "test2@ya.ru");
