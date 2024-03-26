@@ -27,12 +27,12 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler()
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse emailConflictException(final EmailUniqueException e) {
-        log.debug("Конфликт запроса 409 Conflict {}", e.getMessage());
-        return new ErrorResponse(e.getMessage());
-    }
+//    @ExceptionHandler()
+//    @ResponseStatus(HttpStatus.CONFLICT)
+//    public ErrorResponse emailConflictException(final EmailUniqueException e) {
+//        log.debug("Конфликт запроса 409 Conflict {}", e.getMessage());
+//        return new ErrorResponse(e.getMessage());
+//    }
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
