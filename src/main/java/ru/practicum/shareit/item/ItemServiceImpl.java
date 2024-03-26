@@ -42,7 +42,6 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-
     private final ItemRequestService itemRequestService;
 
     private LocalDateTime dateTime = null;
@@ -65,36 +64,6 @@ public class ItemServiceImpl implements ItemService {
         }
         itemDto.setComments(CommentMapper.mapToListCommentDto(commentRepository.findByItemId(id)));
         return itemDto;
-    }
-
-    private List<ItemDto> addInfo(List<Item> items) {
-        List<ItemDto> itemDtoList = ItemMapper.mapToListItemDto(items);
-        List<Booking> allBookings = bookingRepository.findByItemIn(items);
-        Map<ItemDto, List<CommentDto>> comments = commentRepository.findByItemIn(items, Sort.by(DESC, "created"))
-                .stream()
-                .collect(groupingBy(item -> ItemMapper.maToItemDto(item.getItem()), Collectors.mapping(CommentMapper::mapToCommentDto, Collectors.toList())));
-
-        Map<ItemDto, List<Booking>> bookingMap = new HashMap<>();
-        for (ItemDto itemDto : itemDtoList) {
-            List<Booking> bookingsForItem = allBookings.stream().filter(booking -> booking.getItem().getId() == itemDto.getId()).collect(Collectors.toList());
-            bookingMap.put(itemDto, bookingsForItem);
-            bookingsForItem.stream()
-                    .filter(b -> !b.getStart().isAfter(dateTime))
-                    .max(Comparator.comparing(Booking::getStart))
-                    .ifPresent(lastBooking -> itemDto.setLastBooking(BookingMapper.mapToBookingDtoFromItem(lastBooking)));
-
-            bookingsForItem.stream()
-                    .filter(b -> b.getStart().isAfter(dateTime))
-                    .min(Comparator.comparing(Booking::getStart))
-                    .ifPresent(nextBooking -> itemDto.setNextBooking(BookingMapper.mapToBookingDtoFromItem(nextBooking)));
-
-            List<CommentDto> commentsForItem = comments.get(itemDto);
-            if (commentsForItem != null) {
-                itemDto.setComments(commentsForItem);
-            }
-        }
-
-        return itemDtoList;
     }
 
 
@@ -153,9 +122,40 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> findByOwnerId(int userId, Pageable pageable) {
+    public List<ItemDto> getItems(int userId, Pageable pageable) {
         List<Item> items = itemRepository.findAllByOwnerId(userId, pageable);
         return addInfo(items);
+    }
+
+    private List<ItemDto> addInfo(List<Item> items) {
+        List<ItemDto> itemDtoList = ItemMapper.mapToListItemDto(items);
+        dateTime = LocalDateTime.now();
+        List<Booking> allBookings = bookingRepository.findByItemIn(items);
+        Map<ItemDto, List<CommentDto>> comments = commentRepository.findByItemIn(items, Sort.by(DESC, "created"))
+                .stream()
+                .collect(groupingBy(item -> ItemMapper.maToItemDto(item.getItem()), Collectors.mapping(CommentMapper::mapToCommentDto, Collectors.toList())));
+
+        Map<ItemDto, List<Booking>> bookingMap = new HashMap<>();
+        for (ItemDto itemDto : itemDtoList) {
+            List<Booking> bookingsForItem = allBookings.stream().filter(booking -> booking.getItem().getId() == itemDto.getId()).collect(Collectors.toList());
+            bookingMap.put(itemDto, bookingsForItem);
+            bookingsForItem.stream()
+                    .filter(b -> !b.getStart().isAfter(dateTime))
+                    .max(Comparator.comparing(Booking::getStart))
+                    .ifPresent(lastBooking -> itemDto.setLastBooking(BookingMapper.mapToBookingDtoFromItem(lastBooking)));
+
+            bookingsForItem.stream()
+                    .filter(b -> b.getStart().isAfter(dateTime))
+                    .min(Comparator.comparing(Booking::getStart))
+                    .ifPresent(nextBooking -> itemDto.setNextBooking(BookingMapper.mapToBookingDtoFromItem(nextBooking)));
+
+            List<CommentDto> commentsForItem = comments.get(itemDto);
+            if (commentsForItem != null) {
+                itemDto.setComments(commentsForItem);
+            }
+        }
+
+        return itemDtoList;
     }
 
     private boolean checkBeforeComment(int userId, int id) {

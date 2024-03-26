@@ -44,7 +44,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequest(int userId, int from, Integer size) {
+    public List<ItemRequestDto> getAllRequestPage(int userId, int from, Integer size) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
         List<ItemRequest> itemRequests = repository.getAllRequest(userId, Sort.by(Sort.Direction.DESC, "created"));
         size = (size != null) ? size : itemRequests.size();

@@ -45,16 +45,16 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> getBookingWithStatus(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "100", required = false) @Min(1) Integer size) {
-        List<BookingDto> bookingDto = service.getBookingWithStatus(requestId, state, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.DESC, "start")));
+    public List<BookingDto> getBookingWithStatus(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
+        List<BookingDto> bookingDto = service.getBookingWithStatus(userId, state, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.DESC, "start")));
         log.info("Список заазов выведен \"{}\" ", bookingDto.size());
         return bookingDto;
     }
 
     @GetMapping("/owner")
-    public List<BookingDto> getBookingWithStatusOwner(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int requestId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "100", required = false) @Min(1) Integer size) {
+    public List<BookingDto> getBookingWithStatusOwner(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "ALL") String state, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
         Sort.by("id").ascending();
-        List<BookingDto> bookingDto = service.getBookingWithStatusOwner(requestId, state, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.DESC, "start")));
+        List<BookingDto> bookingDto = service.getBookingWithStatusOwner(userId, state, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.DESC, "start")));
         log.info("Список заазов владельца выведен \"{}\" ", bookingDto.size());
         return bookingDto;
     }
