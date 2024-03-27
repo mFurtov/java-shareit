@@ -2,7 +2,7 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingDto;
@@ -60,54 +60,54 @@ public class BookingServiceImpl implements BookingService {
 
     }
 
-    public BookingDto getBooking(int requestId, int bookingId) {
+    public BookingDto getBooking(int userId, int bookingId) {
         bookingRepository.findByIdOrThrow(bookingId);
-        return BookingMapper.mapToBookingDto(bookingRepository.searchBookingOrThrow(requestId, bookingId));
+        return BookingMapper.mapToBookingDto(bookingRepository.searchBookingOrThrow(userId, bookingId));
 
 
     }
 
     @Override
-    public List<BookingDto> getBookingWithStatus(int requestId, String state) {
-        UserDto user = userService.getUserById(requestId);
+    public List<BookingDto> getBookingWithStatus(int userId, String state, Pageable pageable) {
+        UserDto user = userService.getUserById(userId);
         final LocalDateTime dataNow = LocalDateTime.now();
 
         switch (BookingEnum.getEnum(state)) {
             case ALL:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByBookerIdOrderByStartDesc(requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByBookerIdOrderByStartDesc(userId, pageable));
             case CURRENT:
-                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookings(dataNow, userId, pageable));
             case PAST:
-                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, userId, pageable));
             case FUTURE:
-                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, userId, pageable));
             case WAITING:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.WAITING, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.WAITING, userId, pageable));
             case REJECTED:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.REJECTED, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.REJECTED, userId, pageable));
             default:
                 log.error("Unknown state: UNSUPPORTED_STATUS");
                 throw new ValidException("Unknown state: UNSUPPORTED_STATUS");
         }
     }
 
-    public List<BookingDto> getBookingWithStatusOwner(int requestId, String state) {
+    public List<BookingDto> getBookingWithStatusOwner(int requestId, String state, Pageable pageable) {
         UserDto user = userService.getUserById(requestId);
         final LocalDateTime dataNow = LocalDateTime.now();
 
         switch (BookingEnum.getEnum(state)) {
             case ALL:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByItemOwnerIdOrderByStartDesc(requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByItemOwnerIdOrderByStartDesc(requestId, pageable));
             case CURRENT:
-                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookingsOwner(dataNow, requestId, pageable));
             case PAST:
-                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookingsOwner(dataNow, requestId, pageable));
             case FUTURE:
-                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookingsOwner(dataNow, requestId, Sort.by(Sort.Direction.DESC, "start")));
+                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookingsOwner(dataNow, requestId, pageable));
             case WAITING:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus.WAITING, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus.WAITING, requestId, pageable));
             case REJECTED:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus.REJECTED, requestId));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus.REJECTED, requestId, pageable));
             default:
                 log.error("Unknown state: UNSUPPORTED_STATUS");
                 throw new ValidException("Unknown state: UNSUPPORTED_STATUS");

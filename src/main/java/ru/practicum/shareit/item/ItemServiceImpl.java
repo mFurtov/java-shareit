@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingStatus;
@@ -20,6 +21,8 @@ import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.modul.ItemRequest;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -39,15 +42,10 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestService itemRequestService;
 
     private LocalDateTime dateTime = null;
 
-
-    @Override
-    public List<ItemDto> getItem(int userId) {
-        List<Item> item = itemRepository.findByOwnerIdOrderById(userId);
-        return addInfo(item);
-    }
 
     @Override
     public ItemDto getItemId(int userId, int id) {
@@ -68,8 +66,73 @@ public class ItemServiceImpl implements ItemService {
         return itemDto;
     }
 
+
+    @Override
+    public Item getItemNDto(int id) {
+        Item item = itemRepository.getById(id);
+        item.toString();
+        return item;
+    }
+
+    @Override
+    public ItemDto postItem(int userId, ItemCreateDto itemDto) {
+        User user = UserMapper.fromUserDto(userService.getUserById(userId));
+        ItemRequest itemRequest = null;
+        if (itemDto.getRequestId() != null) {
+            itemRequest = itemRequestService.getAllRequest(itemDto.getRequestId());
+        }
+        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user, itemRequest)));
+    }
+
+    @Override
+    public ItemDto patchItem(int userId, int id, ItemCreateDto itemDto) {
+        Item item = itemRepository.getById(id);
+
+        if (item.getOwner().getId() == userId) {
+            if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
+                item.setName(itemDto.getName());
+            }
+            if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
+                item.setDescription(itemDto.getDescription());
+            }
+            if (itemDto.getAvailable() != null) {
+                item.setAvailable(itemDto.getAvailable());
+            }
+        } else {
+            log.error("Указанный владелец не владелец вещи");
+            throw new OwnerException("Доступ к предмету отсутствует, указан неверный владелец");
+        }
+
+        return ItemMapper.maToItemDto(itemRepository.save(item));
+    }
+
+    public List<ItemDto> searchItems(String search, Pageable pageable) {
+        return ItemMapper.mapToListItemDto(itemRepository.search(search, pageable));
+    }
+
+
+    public CommentDto postComments(int userId, int id, CommentRequestDto commentRequestDto) {
+        Item item = itemRepository.getById(id);
+        User user = UserMapper.fromUserDto(userService.getUserById(userId));
+        if (checkBeforeComment(userId, id)) {
+            Comment comment = new Comment(commentRequestDto.getText(), item, user);
+
+            return CommentMapper.mapToCommentDto(commentRepository.save(comment));
+        } else {
+            log.error("Ошиба валидации");
+            throw new ValidException("Ошиба валидации");
+        }
+    }
+
+    @Override
+    public List<ItemDto> getItems(int userId, Pageable pageable) {
+        List<Item> items = itemRepository.findAllByOwnerId(userId, pageable);
+        return addInfo(items);
+    }
+
     private List<ItemDto> addInfo(List<Item> items) {
         List<ItemDto> itemDtoList = ItemMapper.mapToListItemDto(items);
+        dateTime = LocalDateTime.now();
         List<Booking> allBookings = bookingRepository.findByItemIn(items);
         Map<ItemDto, List<CommentDto>> comments = commentRepository.findByItemIn(items, Sort.by(DESC, "created"))
                 .stream()
@@ -98,63 +161,10 @@ public class ItemServiceImpl implements ItemService {
         return itemDtoList;
     }
 
-
-    @Override
-    public Item getItemNDto(int id) {
-        Item item = itemRepository.getById(id);
-        item.toString();
-        return item;
-    }
-
-    @Override
-    public ItemDto postItem(int userId, ItemCreateDto itemDto) {
-        User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user)));
-    }
-
-    @Override
-    public ItemDto patchItem(int userId, int id, ItemCreateDto itemDto) {
-        Item item = itemRepository.getById(id);
-
-        if (item.getOwner().getId() == userId) {
-            if (itemDto.getName() != null && !itemDto.getName().isBlank()) {
-                item.setName(itemDto.getName());
-            }
-            if (itemDto.getDescription() != null && !itemDto.getDescription().isBlank()) {
-                item.setDescription(itemDto.getDescription());
-            }
-            if (itemDto.getAvailable() != null) {
-                item.setAvailable(itemDto.getAvailable());
-            }
-        } else {
-            log.error("Указанный владелец не владелец вещи");
-            throw new OwnerException("Доступ к предмету отсутствует, указан неверный владелец");
-        }
-
-        return ItemMapper.maToItemDto(itemRepository.save(item));
-    }
-
-    public List<ItemDto> searchItems(String search) {
-        return ItemMapper.mapToListItemDto(itemRepository.search(search));
-    }
-
-
-    public CommentDto postComments(int userId, int id, CommentRequestDto commentRequestDto) {
-        Item item = itemRepository.getById(id);
-        User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        if (checkBeforeComment(userId, id)) {
-            Comment comment = new Comment(commentRequestDto.getText(), item, user);
-
-            return CommentMapper.mapToCommentDto(commentRepository.save(comment));
-        } else {
-            log.error("Ошиба валидации");
-            throw new ValidException("Ошиба валидации");
-        }
-    }
-
     private boolean checkBeforeComment(int userId, int id) {
         dateTime = LocalDateTime.now();
         return bookingRepository.existsByItemIdAndBookerIdAndStatusAndEndBefore(id, userId, BookingStatus.APPROVED, dateTime);
-
     }
+
+
 }
