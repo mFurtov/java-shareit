@@ -85,14 +85,14 @@ class ItemControllerTest {
                         .param("from", "-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
         mvc.perform(get("/items/search")
                         .param("text", string)
                         .param("from", "0")
                         .param("size", "0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test

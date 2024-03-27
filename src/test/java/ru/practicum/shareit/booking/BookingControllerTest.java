@@ -101,13 +101,13 @@ class BookingControllerTest {
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .param("state", "ALL")
                         .param("from", "-1"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         mvc.perform(get("/bookings")
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .param("state", "ALL")
                         .param("size", "0"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -127,13 +127,13 @@ class BookingControllerTest {
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .param("state", "ALL")
                         .param("from", "-1"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
         mvc.perform(get("/bookings")
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .param("state", "ALL")
                         .param("size", "0"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
     }
 }

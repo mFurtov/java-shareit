@@ -77,7 +77,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto postItem(int userId, ItemCreateDto itemDto) {
         User user = UserMapper.fromUserDto(userService.getUserById(userId));
-        ItemRequest itemRequest = itemRequestService.getAllRequest(itemDto.getRequestId());
+        ItemRequest itemRequest = null;
+        if (itemDto.getRequestId() != null) {
+            itemRequest = itemRequestService.getAllRequest(itemDto.getRequestId());
+        }
         return ItemMapper.maToItemDto(itemRepository.save(ItemMapper.mapFromItemDto(itemDto, user, itemRequest)));
     }
 

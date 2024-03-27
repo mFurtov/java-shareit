@@ -89,14 +89,14 @@ class ItemRequestControllerTest {
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("from", "-1"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
 
         mvc.perform(get("/requests/all")
                         .header(HeaderConstants.X_SHARER_USER_ID, 123)
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("size", "0"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isBadRequest());
 
     }
 

@@ -19,5 +19,5 @@ public class ItemCreateDto {
     @NotNull(groups = Create.class)
     private Boolean available;
 
-    private int requestId;
+    private Integer requestId;
 }
