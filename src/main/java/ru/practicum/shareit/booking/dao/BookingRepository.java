@@ -1,6 +1,6 @@
 package ru.practicum.shareit.booking.dao;
 
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import ru.practicum.shareit.booking.BookingStatus;
@@ -29,38 +29,38 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     default Booking searchBookingOrThrow(int requestId, int bookingId) {
         Booking booking = searchBooking(requestId, bookingId);
         if (booking == null) {
-            throw new EntityNotFoundException("Обьект не найден");
+            throw new EntityNotFoundException("Объект не найден");
         }
         return booking;
     }
 
     @Query("SELECT b FROM Booking b WHERE b.start <= ?1 and b.end >= ?1 and b.booker.id = ?2")
-    List<Booking> findCurrentBookings(LocalDateTime data, int id, Sort sort);
+    List<Booking> findCurrentBookings(LocalDateTime data, int id, Pageable sort);
 
-    List<Booking> findByBookerIdOrderByStartDesc(int id);
+    List<Booking> findByBookerIdOrderByStartDesc(int id, Pageable pageable);
 
     @Query("SELECT b FROM Booking b WHERE b.end  <= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
-    List<Booking> findPastBookings(LocalDateTime data, int id, Sort sort);
+    List<Booking> findPastBookings(LocalDateTime data, int id, Pageable sort);
 
     @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.booker.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
-    List<Booking> findFutureBookings(LocalDateTime data, int id, Sort sort);
+    List<Booking> findFutureBookings(LocalDateTime data, int id, Pageable sort);
 
-    List<Booking> findByStatusAndBookerIdOrderByStartDesc(BookingStatus status, int id);
+    List<Booking> findByStatusAndBookerIdOrderByStartDesc(BookingStatus status, int id, Pageable pageable);
 
     List<Booking> findByItemIdAndItemOwnerIdAndStatusNotOrderByStart(int itemId, int userId, BookingStatus bookingStatus);
 
     boolean existsByItemIdAndBookerIdAndStatusAndEndBefore(int itemId, int bookerId, BookingStatus status, LocalDateTime dateTime);
 
     @Query("SELECT b FROM Booking b WHERE b.start <= ?1 AND b.end >= ?1 and b.item.owner.id = ?2")
-    List<Booking> findCurrentBookingsOwner(LocalDateTime data, int id, Sort sort);
+    List<Booking> findCurrentBookingsOwner(LocalDateTime data, int id, Pageable pageable);
 
-    List<Booking> findByItemOwnerIdOrderByStartDesc(int id);
+    List<Booking> findByItemOwnerIdOrderByStartDesc(int id, Pageable pageable);
 
     @Query("SELECT b FROM Booking b WHERE b.end <= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
-    List<Booking> findPastBookingsOwner(LocalDateTime data, int id, Sort sort);
+    List<Booking> findPastBookingsOwner(LocalDateTime data, int id, Pageable pageable);
 
     @Query("SELECT b FROM Booking b WHERE b.start >= ?1 and b.item.owner.id = ?2 and b.status IN ('WAITING', 'APPROVED')")
-    List<Booking> findFutureBookingsOwner(LocalDateTime data, int id, Sort sort);
+    List<Booking> findFutureBookingsOwner(LocalDateTime data, int id, Pageable pageable);
 
-    List<Booking> findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus status, int id);
+    List<Booking> findByStatusAndItemOwnerIdOrderByStartDesc(BookingStatus status, int id, Pageable pageable);
 }

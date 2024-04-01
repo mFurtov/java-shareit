@@ -1,12 +1,13 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoFromItem;
 
 import java.util.List;
 import java.util.Objects;
 
-
+@NoArgsConstructor
 @Data
 public class ItemDto {
     private int id;
@@ -19,12 +20,14 @@ public class ItemDto {
     private BookingDtoFromItem nextBooking;
 
     private List<CommentDto> comments;
+    private int requestId;
 
-    public ItemDto(int id, String name, String description, Boolean available) {
+    public ItemDto(int id, String name, String description, Boolean available, int requestId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.available = available;
+        this.requestId = requestId;
     }
 
     @Override
