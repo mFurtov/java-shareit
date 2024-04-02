@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/users")
-@Slf4j
 public class UserController {
 
     private final UserClient client;
