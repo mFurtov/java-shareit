@@ -128,6 +128,7 @@ class BookingServiceImplTest {
         verify(bookingRepository).findByStatusAndBookerIdOrderByStartDesc(BookingStatus.REJECTED, userId, pageable);
 
         assertThrows(ValidException.class, () -> bookingService.getBookingWithStatus(userId, "TEST", pageable));
+
     }
 
     @Test
