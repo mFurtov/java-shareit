@@ -1,15 +1,12 @@
 package ru.practicum.gateway.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.gateway.Update;
 import ru.practicum.gateway.user.client.UserClient;
 import ru.practicum.gateway.user.dto.UserDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController

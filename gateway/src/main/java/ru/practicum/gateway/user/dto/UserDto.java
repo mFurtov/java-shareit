@@ -4,7 +4,6 @@ import lombok.Data;
 import ru.practicum.gateway.Create;
 import ru.practicum.gateway.Update;
 
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

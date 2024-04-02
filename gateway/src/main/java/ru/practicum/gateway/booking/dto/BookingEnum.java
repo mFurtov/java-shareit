@@ -1,8 +1,5 @@
 package ru.practicum.gateway.booking.dto;
 
-import ru.practicum.shareit.exception.ValidException;
-
-import java.util.stream.Stream;
 
 public enum BookingEnum {
     ALL,
@@ -12,7 +9,5 @@ public enum BookingEnum {
     WAITING,
     REJECTED;
 
-    public static BookingEnum getEnum(String status) {
-        return Stream.of(BookingEnum.values()).filter(bookingEnum -> bookingEnum.name().equalsIgnoreCase(status)).findFirst().orElseThrow(() -> new ValidException("Unknown state: UNSUPPORTED_STATUS"));
-    }
+
 }

@@ -3,8 +3,8 @@ package ru.practicum.gateway.booking.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.Create;
-import ru.practicum.shareit.booking.modul.StartAndBeforeValid;
+import ru.practicum.gateway.Create;
+import ru.practicum.gateway.booking.validator.StartAndBeforeValid;
 
 import java.time.LocalDateTime;
 

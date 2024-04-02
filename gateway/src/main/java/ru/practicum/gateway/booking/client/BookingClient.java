@@ -8,9 +8,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.gateway.booking.dto.BookingDtoRequest;
-import ru.practicum.gateway.booking.dto.BookingEnum;
 import ru.practicum.gateway.client.BaseClient;
-import ru.practicum.gateway.item.dto.CommentRequestDto;
 
 import java.util.Map;
 

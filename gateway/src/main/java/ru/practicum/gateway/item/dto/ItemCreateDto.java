@@ -1,8 +1,8 @@
 package ru.practicum.gateway.item.dto;
 
 import lombok.Data;
-import ru.practicum.shareit.Create;
-import ru.practicum.shareit.Update;
+import ru.practicum.gateway.Create;
+import ru.practicum.gateway.Update;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

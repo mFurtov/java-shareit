@@ -11,7 +11,6 @@ import ru.practicum.gateway.Create;
 import ru.practicum.gateway.HeaderConstants;
 import ru.practicum.gateway.booking.client.BookingClient;
 import ru.practicum.gateway.booking.dto.BookingDtoRequest;
-import ru.practicum.gateway.booking.dto.BookingEnum;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
