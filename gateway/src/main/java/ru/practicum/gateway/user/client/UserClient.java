@@ -35,6 +35,10 @@ public class UserClient extends BaseClient {
     }
 
     public ResponseEntity<Object> patchUser(int id, UserDto userDto) {
-        return patch("/"+id, userDto);
+        return patch("/" + id, userDto);
+    }
+
+    public ResponseEntity<Object> dellUser(int userId) {
+        return delete("/" + userId);
     }
 }
