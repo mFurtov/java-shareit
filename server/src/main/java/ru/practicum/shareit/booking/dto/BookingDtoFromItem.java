@@ -8,11 +8,8 @@ import java.util.Objects;
 @Data
 public class BookingDtoFromItem {
     private int id;
-
     private LocalDateTime start;
-
     private LocalDateTime end;
-
     private int bookerId;
 
     public BookingDtoFromItem(int id, LocalDateTime start, LocalDateTime end, int bookerId) {

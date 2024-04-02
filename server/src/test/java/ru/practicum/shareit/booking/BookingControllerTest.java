@@ -45,19 +45,6 @@ class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(bookingDto.getId()));
 
-        bookingDtoRequest.setStart(LocalDateTime.now().minusHours(1));
-        mvc.perform(post("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(bookingDtoRequest)))
-                .andExpect(status().isBadRequest());
-
-        bookingDtoRequest.setEnd(LocalDateTime.now());
-        mvc.perform(post("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(bookingDtoRequest)))
-                .andExpect(status().isBadRequest());
 
     }
 
@@ -97,17 +84,6 @@ class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(bookingDtoList.size()));
 
-        mvc.perform(get("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .param("state", "ALL")
-                        .param("from", "-1"))
-                .andExpect(status().isBadRequest());
-
-        mvc.perform(get("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .param("state", "ALL")
-                        .param("size", "0"))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -122,18 +98,6 @@ class BookingControllerTest {
                         .param("state", "ALL"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(bookingDtoList.size()));
-
-        mvc.perform(get("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .param("state", "ALL")
-                        .param("from", "-1"))
-                .andExpect(status().isBadRequest());
-
-        mvc.perform(get("/bookings")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .param("state", "ALL")
-                        .param("size", "0"))
-                .andExpect(status().isBadRequest());
 
     }
 }

@@ -11,6 +11,7 @@ import ru.practicum.gateway.client.BaseClient;
 import ru.practicum.gateway.request.dto.ItemRequestCreateDto;
 
 import java.util.Map;
+
 @Service
 
 public class ItemRequestClient extends BaseClient {
@@ -23,17 +24,21 @@ public class ItemRequestClient extends BaseClient {
                 .requestFactory(HttpComponentsClientHttpRequestFactory::new)
                 .build());
     }
-    public ResponseEntity<Object> postRequest(Long userId, ItemRequestCreateDto itemRequestCreateDto){
-        return post("",userId,itemRequestCreateDto);
+
+    public ResponseEntity<Object> postRequest(Long userId, ItemRequestCreateDto itemRequestCreateDto) {
+        return post("", userId, itemRequestCreateDto);
     }
-    public ResponseEntity<Object> getRequest(Long userId){
-        return get("",userId);
+
+    public ResponseEntity<Object> getRequest(Long userId) {
+        return get("", userId);
     }
-    public ResponseEntity<Object> getAllRequest(Long userId,int from,int size){
+
+    public ResponseEntity<Object> getAllRequest(Long userId, int from, int size) {
         Map<String, Object> parameters = Map.of("from", from, "size", size);
         return get("/all?from={from}&size={size}", userId, parameters);
     }
-    public ResponseEntity<Object> getRequestById(Long userId,int id){
-        return get("/"+id,userId);
+
+    public ResponseEntity<Object> getRequestById(Long userId, int id) {
+        return get("/" + id, userId);
     }
 }

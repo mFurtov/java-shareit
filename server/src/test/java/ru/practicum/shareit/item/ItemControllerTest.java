@@ -80,19 +80,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.size()", is(1)))
                 .andExpect(jsonPath("$[0].id", is(itemDtoList.get(0).getId())))
                 .andExpect(jsonPath("$[0].name", is(itemDtoList.get(0).getName())));
-        mvc.perform(get("/items/search")
-                        .param("text", string)
-                        .param("from", "-1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-        mvc.perform(get("/items/search")
-                        .param("text", string)
-                        .param("from", "0")
-                        .param("size", "0")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -119,22 +106,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name").value("Test Item"))
                 .andExpect(jsonPath("$.description").value("Test Description"))
                 .andExpect(jsonPath("$.available").value(true));
-
-        itemCreateDto.setName("");
-        mvc.perform(post("/items")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(itemCreateDto)))
-                .andExpect(status().isBadRequest());
-
-        itemCreateDto.setName("Test");
-        itemCreateDto.setDescription("");
-        mvc.perform(post("/items")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(itemCreateDto)))
-                .andExpect(status().isBadRequest());
-
 
     }
 
@@ -163,20 +134,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.description").value("Updated Description"))
                 .andExpect(jsonPath("$.available").value(false));
 
-        itemCreateDto.setName("");
-        mvc.perform(patch("/items/1")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(itemCreateDto)))
-                .andExpect(status().isBadRequest());
-
-        itemCreateDto.setName("Test");
-        itemCreateDto.setDescription("");
-        mvc.perform(patch("/items/1")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(itemCreateDto)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -197,12 +154,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.text").value("Test Comment"))
                 .andExpect(jsonPath("$.authorName").value("Test"));
 
-        commentRequestDto.setText("");
-        mvc.perform(post("/items/123/comment")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 456)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(commentRequestDto)))
-                .andExpect(status().isBadRequest());
     }
 
 }

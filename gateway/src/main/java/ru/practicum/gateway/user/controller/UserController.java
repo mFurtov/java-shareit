@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.gateway.Create;
 import ru.practicum.gateway.Update;
 import ru.practicum.gateway.user.client.UserClient;
 import ru.practicum.gateway.user.dto.UserDto;
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> postUser(@RequestBody UserDto user) {
+    public ResponseEntity<Object> postUser(@Validated(Create.class) @RequestBody UserDto user) {
 
         return client.postItem(user);
     }

@@ -42,10 +42,11 @@ public class ItemClient extends BaseClient {
         return get("/" + id, userId);
     }
 
-    public ResponseEntity<Object> searchItems( String text, int from, int size) {
+    public ResponseEntity<Object> searchItems(String text, int from, int size) {
         Map<String, Object> parameters = Map.of("text", text, "from", from, "size", size);
-        return get("/search?text={text}&from={from}&size={size}",parameters);
+        return get("/search?text={text}&from={from}&size={size}", parameters);
     }
+
     public ResponseEntity<Object> postComments(Long useId, int id, CommentRequestDto commentRequestDto) {
         String url = "/" + id + "/comment";
         return post(url, useId, commentRequestDto);

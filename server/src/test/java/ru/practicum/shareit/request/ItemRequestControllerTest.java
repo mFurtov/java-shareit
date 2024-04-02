@@ -47,13 +47,6 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(requestDto.getId()));
 
-        requestCreateDto.setDescription("");
-        mvc.perform(post("/requests")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestCreateDto)))
-                .andExpect(status().isBadRequest());
-
     }
 
     @Test
@@ -84,20 +77,6 @@ class ItemRequestControllerTest {
                         .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(itemRequestDtoList.size())));
-
-        mvc.perform(get("/requests/all")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("from", "-1"))
-                .andExpect(status().isBadRequest());
-
-
-        mvc.perform(get("/requests/all")
-                        .header(HeaderConstants.X_SHARER_USER_ID, 123)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("size", "0"))
-                .andExpect(status().isBadRequest());
-
     }
 
     @Test

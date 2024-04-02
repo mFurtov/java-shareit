@@ -73,18 +73,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.name").value(savedUserDto.getName()))
                 .andExpect(jsonPath("$.email").value(savedUserDto.getEmail()));
 
-        userDto.setName("");
-        mvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest());
-
-        userDto.setName("Test");
-        userDto.setEmail("");
-        mvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test
