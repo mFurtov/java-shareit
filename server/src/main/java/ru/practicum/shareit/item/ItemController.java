@@ -22,12 +22,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public List<ItemDto> getItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
-        List<ItemDto> item = itemService.findByOwnerId(userId, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
+    public List<ItemDto> getItem(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+        List<ItemDto> item = itemService.getItems(userId, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
         log.info("Выведен список предметов размером \"{}\" ", item.size());
         return item;
     }
@@ -40,7 +41,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestParam String text, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10", required = false) @Min(1) Integer size) {
+    public List<ItemDto> searchItems(@RequestParam String text, @RequestParam(defaultValue = "0") @PositiveOrZero int from, @RequestParam(defaultValue = "10") @Min(1) Integer size) {
         List<ItemDto> itemList = itemService.searchItems(text, PageableCreate.getPageable(from, size, Sort.by(Sort.Direction.ASC, "id")));
         log.info("Поиск по запросу \"{}\" был выведен", text);
         return itemList;

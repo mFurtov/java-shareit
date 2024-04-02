@@ -68,23 +68,23 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> getBookingWithStatus(int requestId, String state, Pageable pageable) {
-        UserDto user = userService.getUserById(requestId);
+    public List<BookingDto> getBookingWithStatus(int userId, String state, Pageable pageable) {
+        UserDto user = userService.getUserById(userId);
         final LocalDateTime dataNow = LocalDateTime.now();
 
         switch (BookingEnum.getEnum(state)) {
             case ALL:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByBookerIdOrderByStartDesc(requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByBookerIdOrderByStartDesc(userId, pageable));
             case CURRENT:
-                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookings(dataNow, requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findCurrentBookings(dataNow, userId, pageable));
             case PAST:
-                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findPastBookings(dataNow, userId, pageable));
             case FUTURE:
-                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findFutureBookings(dataNow, userId, pageable));
             case WAITING:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.WAITING, requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.WAITING, userId, pageable));
             case REJECTED:
-                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.REJECTED, requestId, pageable));
+                return BookingMapper.mapToListUserDto(bookingRepository.findByStatusAndBookerIdOrderByStartDesc(BookingStatus.REJECTED, userId, pageable));
             default:
                 log.error("Unknown state: UNSUPPORTED_STATUS");
                 throw new ValidException("Unknown state: UNSUPPORTED_STATUS");

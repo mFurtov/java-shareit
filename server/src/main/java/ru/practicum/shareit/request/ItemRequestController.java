@@ -28,15 +28,15 @@ public class ItemRequestController {
     }
 
     @GetMapping
-    public List<ItemRequestDto> getRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) @Validated(Create.class) int userId) {
+    public List<ItemRequestDto> getRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId) {
         List<ItemRequestDto> requests = itemRequestService.getRequest(userId);
         log.info("Выведен список запросов размером \"{}\" ", requests.size());
         return requests;
     }
 
     @GetMapping("/all")
-    public List<ItemRequestDto> getAllRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @Min(0) int from, @RequestParam(required = false) @Min(1) Integer size) {
-        List<ItemRequestDto> requests = itemRequestService.getAllRequest(userId, from, size);
+    public List<ItemRequestDto> getAllRequest(@RequestHeader(HeaderConstants.X_SHARER_USER_ID) int userId, @RequestParam(defaultValue = "0") @Min(0) int from, @RequestParam(defaultValue = "10") @Min(1) Integer size) {
+        List<ItemRequestDto> requests = itemRequestService.getAllRequestPage(userId, from, size);
         log.info("Выведен список запросов размером \"{}\" ", requests.size());
         return requests;
     }

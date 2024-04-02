@@ -22,7 +22,7 @@ public interface ItemService {
 
     CommentDto postComments(int userId, int itemId, CommentRequestDto commentRequestDto);
 
-    List<ItemDto> findByOwnerId(int userId, Pageable pageable);
+    List<ItemDto> getItems(int userId, Pageable pageable);
 
 
 }
