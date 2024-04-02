@@ -40,10 +40,9 @@ public class UserController {
     public ResponseEntity<Object> patchUser(@PathVariable int id, @Validated(Update.class) @RequestBody UserDto userRequest) {
         return client.patchUser(id, userRequest);
     }
-//
-//    @DeleteMapping("/{id}")
-//    public void dellUser(@PathVariable int id) {
-//        service.deleteUser(id);
-//        log.info("Пользователь с id \"{}\" удален", id);
-//    }
+
+    @DeleteMapping("/{id}")
+    public void dellUser(@PathVariable int id) {
+        client.dellUser(id);
+    }
 }
