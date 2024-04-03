@@ -10,17 +10,22 @@ services:
       - server
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
+      - TZ=Europe/Moscow
 
   server:
     build: server
-    image:  shariet-server
+    image: shariet-server
     container_name: shariet-server-container
     ports:
       - "9090:9090"
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      - TZ=Europe/Moscow
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shariet
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=iamroot
+      - SPRING_DRIVER_CLASS_NAME=org.postgresql.Driver
 
   db:
     image: postgres:14-alpine
@@ -28,6 +33,7 @@ services:
     ports:
       - "6541:5432"
     environment:
+      - TZ=Europe/Moscow
       - POSTGRES_PASSWORD=iamroot
       - POSTGRES_USER=postgres
       - POSTGRES_DB=shariet

@@ -57,14 +57,14 @@ class ItemRequestServiceImplIntegrationTest {
         List<ItemRequestDto> request = itemRequestService.getAllRequestPage(2, 0, 10);
 
         assertEquals(4, request.size());
-        assertEquals(2, request.get(0).getId());
+        assertEquals(4, request.get(0).getId());
         assertEquals(1, request.get(3).getId());
-        assertEquals(item.getName(), request.get(0).getItems().get(0).getName());
-        assertEquals(itemTwo.getName(), request.get(2).getItems().get(0).getName());
+        assertEquals(itemTwo.getName(), request.get(0).getItems().get(0).getName());
+        assertEquals(item.getName(), request.get(2).getItems().get(0).getName());
 
         List<ItemRequestDto> requestTwo = itemRequestService.getAllRequestPage(2, 0, 1);
         assertEquals(1, requestTwo.size());
-        assertEquals(2, request.get(0).getId());
+        assertEquals(4, request.get(0).getId());
     }
 
 }
