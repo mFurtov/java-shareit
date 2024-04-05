@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
-import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -21,7 +20,7 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage());
     }
 
-    @ExceptionHandler({ValidException.class, MethodArgumentNotValidException.class, ConstraintViolationException.class})
+    @ExceptionHandler({ValidException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse validCountException(final RuntimeException e) {
         log.debug("Ошибка валидации 400 Bad request {}", e.getMessage());

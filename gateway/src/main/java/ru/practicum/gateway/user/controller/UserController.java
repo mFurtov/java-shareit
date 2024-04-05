@@ -2,6 +2,7 @@ package ru.practicum.gateway.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.gateway.Create;
@@ -10,7 +11,7 @@ import ru.practicum.gateway.user.client.UserClient;
 import ru.practicum.gateway.user.dto.UserDto;
 
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping(path = "/users")
 public class UserController {
 
@@ -39,7 +40,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void dellUser(@PathVariable int id) {
+    public ResponseEntity<Void> dellUser(@PathVariable int id) {
         client.dellUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
